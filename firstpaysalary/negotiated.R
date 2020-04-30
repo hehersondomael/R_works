@@ -1,5 +1,4 @@
 # System library: base, datasets, graphics, grDevices, methods, stats, utils
-
 '
 install.packages("dplyr")
 install.packages("gdata")
@@ -15,7 +14,7 @@ library(xlsx)
 '
 
 # Read xlsx file
-# my_data <- read.xlsx("firstpaysurvey.xlsx",1)
+my_data <- read.xlsx("firstpaysurvey.xlsx", 1, sheetName = "Sheet1")
 # View(my_data)
 layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
 
@@ -34,7 +33,7 @@ PLMayers <- filter(my_data, (school=="PLM" |
 counts <- table(PLMayers$negotiated, useNA="always")
 counts <- counts[c(2,1)]
 barplot(counts, main="How many negotiated among PLM grads?",
-        xlab="Response", ylim=c(0,30), las=2, horiz=FALSE,
+        xlab="Response", ylim=c(0,30), las=1, horiz=FALSE,
         col=c("#dcd0c0", "#373737"))
 
 # 2. NEGOTIATED PERCENTAGE (TIP)
@@ -46,7 +45,7 @@ TIPians <- filter(my_data, (school=="Technological Institute of the Philippines 
 counts <- table(TIPians$negotiated, useNA="always")
 counts <- counts[c(2,1)]
 barplot(counts, main="How many negotiated among TIP grads?",
-        xlab="Response", ylim=c(0,30), las=2, horiz=FALSE,
+        xlab="Response", ylim=c(0,30), las=1, horiz=FALSE,
         col=c("#c0b283", "#373737"))
 
 
@@ -72,24 +71,31 @@ noUPGrad_1 <-
     negotiated=="No", ))
 '
 UPGrad <- filter(my_data, (school=="UP Diliman" | 
-                             school=="University of the Philippines - Diliman" |
-                             school=="University of the Philippines Diliman" |
-                             school=="UP diliman" |
-                             school=="University of the Philippines, Diliman" |
-                             school=="Up Diliman" |
-                             school=="UP-Diliman" |
-                             school=="Univeristy of the Philippines Diliman" |
-                             school=="UP Diliman " |
-                             school=="Up diliman" |
-                             school=="University of the Philippines Diliman " |
-                             school=="University of Philippines Diliman" |
-                             school=="University of the Philippines- Diliman" |
-                             school=="UP Diliman (didn't finish)" |
-                             school=="University of the Philippines (Diliman)" |
-                             school=="UP DILIMAN" |
-                             school=="University of the Philiippines Diliman" |
-                             school=="(deferred) University of the Philippines - Diliman" |
-                             school=="UPD"))
+                         school=="University of the Philippines - Diliman" |
+                         school=="University of the Philippines Diliman" |
+                         school=="UP diliman" |
+                         school=="University of the Philippines, Diliman" |
+                         school=="Up Diliman" |
+                         school=="UP-Diliman" |
+                         school=="Univeristy of the Philippines Diliman" |
+                         school=="UP Diliman " |
+                         school=="Up diliman" |
+                         school=="University of the Philippines Diliman " |
+                         school=="University of Philippines Diliman" |
+                         school=="University of the Philippines- Diliman" |
+                         school=="University of the Philippines (Diliman)" |
+                         school=="UP DILIMAN" |
+                         school=="University of the Philiippines Diliman" |
+                         school=="UPD" |
+                         school=="UP" |
+                         school=="UP " |
+                         school=="Up diliman" |
+                         school=="UP Undergrad at the time" |
+                         school=="UP Diliiman" |
+                         school=="University of the Philippines " |
+                         school=="University of the Philippine" |
+                         school=="University of the Philippines" |
+                         school=="University of The Philippines"))
 negotiatedUPGrad <-filter(UPGrad, negotiated=="Yes")
 negotiatedUPGradMale <- filter(negotiatedUPGrad, (gender=="Male" |
                                                     gender=="M"))
@@ -98,23 +104,21 @@ negotiatedUPGradFemale <- filter(negotiatedUPGrad, (gender=="Female" |
                                                     gender=="F"))
 negotiatedUPGradBinary <- nrow(negotiatedUPGradMale)+nrow(negotiatedUPGradFemale)
 negotiatedUPGradOther <- nrow(negotiatedUPGrad)-negotiatedUPGradBinary
-slices <- c(nrow(negotiatedUPGradFemale),
-            nrow(negotiatedUPGradMale),negotiatedUPGradOther)
-lbls <- c("Female", "Male","Other")
+slices <- c(nrow(negotiatedUPGradFemale), negotiatedUPGradOther,
+            nrow(negotiatedUPGradMale))
+lbls <- c("Female", "Other", "Male")
 pct <- paste("(", round(slices/sum(slices)*100, digits=1), "%)", sep="")
 lbls <- paste(lbls, ": ", slices, " ", pct, sep="")
-pie(slices, labels = lbls, radius=1, col=c("#c0b283", "#dcd0c0", "#373737"),
-    main="How genders fared among UPD grads\nwho negotiated their first pay salary?"
-    ,init.angle=90)
+pie(slices, labels = lbls, radius=1, col=c("#dcd0c0","#373737","#c0b283"),
+    main="How genders fared among UPD grads\nwho negotiated their first pay salary?",
+    init.angle=5)
 
 # NEGOTIATED PERCENTAGE (ALL)
-yes <- nrow(filter(my_data, negotiated=="Yes"))
-no <- nrow(filter(my_data, negotiated=="No"))
-undisclosed <- nrow(my_data)-(yes+no)
-slices <- c(yes, no, undisclosed)
+
+slices <- count(my_data$negotiated)$freq
+slices <- slices[c(2,1,3)]
 lbls <- c("Yes", "No", "Undisclosed")
 pct <- paste("(", round(slices/sum(slices)*100, digits=1), "%)", sep="")
 lbls <- paste(lbls, ": ", slices, " ", pct, sep="")
-pie(slices, labels = lbls, radius=1,
-    col=c("#c0b283", "#dcd0c0", "#373737"),
+pie(slices, labels = lbls, radius=1, col=c("#c0b283", "#dcd0c0", "#373737"),
     main="How many negotiated their first salary?\n(Overall) ")
