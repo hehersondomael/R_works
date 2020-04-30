@@ -3,8 +3,11 @@
 #    https://stackoverflow.com/questions/40675778/center-plot-title-in-ggplot2
 #    latitude.to
 
-# User library: ggplot2, ggrepel, mapdata, maps
 # System library: base, datasets, graphics, grDevices, methods, stats, utils
+# library(ggplot2)
+# library(ggrepel)
+# library(mapdata)
+# library(maps)
 
 global <- map_data("world")
 

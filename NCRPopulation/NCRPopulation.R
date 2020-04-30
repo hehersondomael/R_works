@@ -1,7 +1,7 @@
 # Reference: https://www.citypopulation.de/en/philippines/metromanila/admin/
 
-# User library: plotrix
 # System library: base, datasets, graphics, grDevices, methods, stats, utils
+# library(plotrix)
 
 slices <- c(1780148, 386276, 450741, 755300, 2936116, 122180, 1583978, 365525,
             249463, 620422, 588894, 582602, 504509, 665822, 416522, 63840, 804915)
